@@ -36,6 +36,7 @@ module.exports = (function(exports) {
 		questionOrderArray: [],
 		responseOrderArray: [],
 		numQuestions: 0,
+		task_order: 1,
 		questionsPerPage: [6, 6, 2],
 		study_id: "TO_BE_ADDED_IF_USING_LITW_INFRA",
 		study_recommendation: [],
@@ -131,7 +132,8 @@ module.exports = (function(exports) {
 		let numA = 5;
 		let quest = {
 			questions: [],
-			responses: []
+			responses: [],
+			task_order: params.task_order
 		}
 		while(counter <= Math.max(numQ, numA)) {
 			if (counter <= numQ) {
@@ -148,6 +150,7 @@ module.exports = (function(exports) {
 			}
 			counter++;
 		}
+		params.task_order++;
 		params.progressBarWidth += 33;
 		params.questionsPerPage.shift();
 		params.questionOrderArray.splice(0, 6);
