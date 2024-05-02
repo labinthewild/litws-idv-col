@@ -19,6 +19,7 @@ var irbTemplate = require("../templates/irb.html");
 var demographicsTemplate = require("../templates/demographics.html");
 var instructionsTemplate = require("../templates/instructions.html");
 var question1Template = require("./templates/question1.html");
+var question2Template = require("./templates/question2.html");
 var loadingTemplate = require("../templates/loading.html");
 var resultsTemplate = require("../templates/results.html");
 var resultsFooter = require("../templates/results-footer.html");
@@ -33,7 +34,9 @@ module.exports = (function(exports) {
 		questionsAndResponses: {},
 		progressBarWidth: -33,
 		questionOrderArray: [],
+		responseOrderArray: [],
 		numQuestions: 0,
+		questionsPerPage: [6, 6, 2],
 		study_id: "TO_BE_ADDED_IF_USING_LITW_INFRA",
 		study_recommendation: [],
 		preLoad: ["../img/btn-next.png","../img/btn-next-active.png","../img/ajax-loader.gif"],
@@ -70,6 +73,22 @@ module.exports = (function(exports) {
 				display_element: $("#question1"),
 				display_next_button: false,
 			},
+			QUESTION2: {
+				name: "questionnaire",
+				type: "display-slide",
+				template: question2Template,
+				template_data: getStudyQuestions,
+				display_element: $("#question2"),
+				display_next_button: false,
+			},
+			QUESTION3: {
+				name: "questionnaire",
+				type: "display-slide",
+				template: question2Template,
+				template_data: getStudyQuestions,
+				display_element: $("#question1"),
+				display_next_button: false,
+			},
 			COMMENTS: {
 				type: "display-slide",
 				template: commentsTemplate,
@@ -94,18 +113,21 @@ module.exports = (function(exports) {
 	};
 
 	function configureStudy() {
-		params.questionOrderArray = createArray();
+		params.questionOrderArray = createArray(15);
+		params.responseOrderArray = createArray(16);
 		/*timeline.push(params.slides.INTRODUCTION);
 		timeline.push(params.slides.INFORMED_CONSENT);
 		timeline.push(params.slides.DEMOGRAPHICS);*/
 		timeline.push(params.slides.QUESTION1);
+		timeline.push(params.slides.QUESTION2);
+		timeline.push(params.slides.QUESTION3);
 		timeline.push(params.slides.COMMENTS);
 		timeline.push(params.slides.RESULTS);
 	}
 
 	function getStudyQuestions() {
 		let counter = 1;
-		let numQ = 6;
+		let numQ = params.questionsPerPage[0];
 		let numA = 5;
 		let quest = {
 			questions: [],
@@ -120,19 +142,22 @@ module.exports = (function(exports) {
 			}
 			if (counter <= numA) {
 				quest.responses.push({
-					id: counter,
-					text: $.i18n(`study-idv-col-r${counter}`)
+					id: params.responseOrderArray[counter - 1],
+					text: $.i18n(`study-idv-col-r${params.responseOrderArray[counter - 1]}`)
 				})
 			}
 			counter++;
 		}
 		params.progressBarWidth += 33;
+		params.questionsPerPage.shift();
+		params.questionOrderArray.splice(0, 6);
+		params.responseOrderArray.splice(0, 5);
 		return quest;
 	}
 
-	function createArray() {
+	function createArray(num) {
 		let array = [];
-		for (let index = 1; index < 7; index++) {
+		for (let index = 1; index < num; index++) {
 			array.push(index);
 		}
 		return array;
@@ -250,5 +275,3 @@ module.exports = (function(exports) {
 	exports.study.params = params
 
 })( window.LITW = window.LITW || {} );
-
-
