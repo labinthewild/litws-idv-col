@@ -35,6 +35,7 @@ module.exports = (function(exports) {
 		progressBarWidth: -33,
 		questionOrderArray: [],
 		responseOrderArray: [],
+		socials: [],
 		numQuestions: 0,
 		task_order: 1,
 		questionsPerPage: [6, 6, 2],
@@ -85,7 +86,7 @@ module.exports = (function(exports) {
 			QUESTION3: {
 				name: "questionnaire",
 				type: "display-slide",
-				template: question2Template,
+				template: question1Template,
 				template_data: getStudyQuestions,
 				display_element: $("#question1"),
 				display_next_button: false,
@@ -116,6 +117,7 @@ module.exports = (function(exports) {
 	function configureStudy() {
 		params.questionOrderArray = createArray(15);
 		params.responseOrderArray = createArray(16);
+		params.socials = getSocialMediaPlatforms();
 		/*timeline.push(params.slides.INTRODUCTION);
 		timeline.push(params.slides.INFORMED_CONSENT);
 		timeline.push(params.slides.DEMOGRAPHICS);*/
@@ -124,6 +126,14 @@ module.exports = (function(exports) {
 		timeline.push(params.slides.QUESTION3);
 		timeline.push(params.slides.COMMENTS);
 		timeline.push(params.slides.RESULTS);
+	}
+
+	function getSocialMediaPlatforms() {
+		let array = [];
+		for (let index = 1; index < 12; index++) {
+			array.push($.i18n(`study-idv-col-socials${index}`));
+		}
+		return array;
 	}
 
 	function getStudyQuestions() {

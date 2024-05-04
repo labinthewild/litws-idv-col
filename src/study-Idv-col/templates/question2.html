@@ -8,11 +8,18 @@
 </div>
 
 <div id="question-box" class="instructions-stim-container">
+
     <div id="questionnaire">
         <div class="row gap-2">
-            <h3 class="bolded-blue">
+            <h3 class="bolded-blue" style="margin-bottom: 30px;">
                 <span data-i18n="litw-questionaire-instructions{{ this.task_order }}"></span>
             </h3>
+        </div>
+
+        <div style="display: flex; justify-self: center;">
+            <select id="social-media-selector" style="width: 100%;" aria-label="Select your social media">
+                <option selected value="0">--</option>
+            </select>
         </div>
     {{#each questions}}
         <div class="row mt-4">
@@ -36,13 +43,29 @@
 </div>
 
 <script type="text/javascript">
+    let selectedSocialMedia = null;
     LITW.study.params.numQuestions = document.querySelectorAll('[data-type="question"]').length;
 
     $(document).ready(function() {
+        setUpSocialMediaSelection();
         document.getElementById('submit').classList.add('invisible');
         let elem = document.getElementById("bar");
         elem.style.width = LITW.study.params.progressBarWidth + "%";
     });
+
+    function setUpSocialMediaSelection (qID, rID) {
+        let socials = LITW.study.params.socials;
+        let selector = document.getElementById('social-media-selector');
+        selector.addEventListener('change',
+            (ev) => {
+                selectedSocialMedia = ev.target.value;
+            }
+        );
+        for (let socialMedia of Object.keys(socials)) {
+            selector.innerHTML = selector.innerHTML +
+                `<option value="${socialMedia}">${socials[socialMedia]}</option>`;
+        }
+    }
 
     function respondQuestion (qID, rID) {
         selectResponse(qID, rID);
