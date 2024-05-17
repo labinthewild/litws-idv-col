@@ -21,7 +21,7 @@ var instructionsTemplate = require("../templates/instructions.html");
 var question1Template = require("./templates/question1.html");
 var question2Template = require("./templates/question2.html");
 var loadingTemplate = require("../templates/loading.html");
-var resultsTemplate = require("../templates/results.html");
+var resultsTemplate = require("./templates/results.html");
 var resultsFooter = require("../templates/results-footer.html");
 var commentsTemplate = require("../templates/comments.html");
 require("../js/litw/jspsych-display-info");
@@ -35,10 +35,11 @@ module.exports = (function(exports) {
 		progressBarWidth: -33,
 		questionOrderArray: [],
 		responseOrderArray: [],
-		socials: [],
 		numQuestions: 0,
 		task_order: 1,
 		questionsPerPage: [6, 6, 2],
+		selectedSM:"",
+		offset: 0,
 		study_id: "TO_BE_ADDED_IF_USING_LITW_INFRA",
 		study_recommendation: [],
 		preLoad: ["../img/btn-next.png","../img/btn-next-active.png","../img/ajax-loader.gif"],
@@ -130,7 +131,7 @@ module.exports = (function(exports) {
 
 	function getSocialMediaPlatforms() {
 		let array = [];
-		for (let index = 1; index < 12; index++) {
+		for (let index = 0; index < 11; index++) {
 			array.push($.i18n(`study-idv-col-socials${index}`));
 		}
 		return array;

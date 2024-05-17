@@ -16,11 +16,13 @@
             </h3>
         </div>
 
-        <div style="display: flex; justify-self: center;">
-            <select id="social-media-selector" style="width: 100%;" aria-label="Select your social media">
-                <option selected value="0">--</option>
+        <div style="display: flex; justify-content: center; max-width:400px; margin: auto;">
+            <select id="social-media-selector" style="max-width: 400px; width: 400px; height: 30px;">
+                <option style="width:400px;" selected value="0">--</option>
+                <option style="width:400px;" class="editable" value="other">Other</option>
             </select>
         </div>
+        <input style="visibility: hidden; width: 400px; height: 30px;" type="text" id="other-social-media" name="other-social-media"><br><br>
     {{#each questions}}
         <div class="row mt-4">
             <h6 id="question-{{ this.id }}" data-type="question" class="bolded-blue">{{ this.text }}</h6>
@@ -43,6 +45,7 @@
 </div>
 
 <script type="text/javascript">
+
     let selectedSocialMedia = null;
     LITW.study.params.numQuestions = document.querySelectorAll('[data-type="question"]').length;
 
@@ -51,14 +54,22 @@
         document.getElementById('submit').classList.add('invisible');
         let elem = document.getElementById("bar");
         elem.style.width = LITW.study.params.progressBarWidth + "%";
+        LITW.study.params.offset = 5;
     });
 
     function setUpSocialMediaSelection (qID, rID) {
         let socials = LITW.study.params.socials;
         let selector = document.getElementById('social-media-selector');
+        let otherInputField = document.getElementById('other-social-media');
         selector.addEventListener('change',
             (ev) => {
                 selectedSocialMedia = ev.target.value;
+                if( ev.target.value === "other") {
+                    otherInputField.style.visibility = "visible";
+                    selectedSocialMedia = otherInputField.value;
+                } else {
+                    otherInputField.style.visibility = "hidden";
+                }
             }
         );
         for (let socialMedia of Object.keys(socials)) {
@@ -69,7 +80,7 @@
 
     function respondQuestion (qID, rID) {
         selectResponse(qID, rID);
-        LITW.study.params.questionsAndResponses[qID] = rID;
+        LITW.study.params.questionsAndResponses[qID] = rID - LITW.study.params.offset;
         if(Object.keys(LITW.study.params.questionsAndResponses).length % LITW.study.params.numQuestions === 0) {
             document.getElementById('submit').classList.remove('invisible');
         }
@@ -87,8 +98,10 @@
     }
 
     function finishQuestions () {
+        LITW.study.params.selectedSM = selectedSocialMedia;
         let quest = {
-                responses: LITW.study.params.questionsAndResponses
+                responses: LITW.study.params.questionsAndResponses,
+                socialMedia: selectedSocialMedia
             };
         LITW.data.submitStudyData({
             quest: quest

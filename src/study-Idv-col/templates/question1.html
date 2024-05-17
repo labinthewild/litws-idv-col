@@ -42,11 +42,16 @@
         document.getElementById('submit').classList.add('invisible');
         let elem = document.getElementById("bar");
         elem.style.width = LITW.study.params.progressBarWidth + "%";
+        if (LITW.study.params.numQuestions === 2) {
+            LITW.study.params.offset = 10;
+        } else {
+            LITW.study.params.offset = 0;
+        }
     });
 
     function respondQuestion (qID, rID) {
         selectResponse(qID, rID);
-        LITW.study.params.questionsAndResponses[qID] = rID;
+        LITW.study.params.questionsAndResponses[qID] = rID - LITW.study.params.offset;
         if(Object.keys(LITW.study.params.questionsAndResponses).length % LITW.study.params.numQuestions === 0) {
             document.getElementById('submit').classList.remove('invisible');
         }
