@@ -38,7 +38,6 @@ module.exports = (function(exports) {
 		numQuestions: 0,
 		task_order: 1,
 		questionsPerPage: [6, 6, 2],
-		selectedSM:"",
 		offset: 0,
 		study_id: "TO_BE_ADDED_IF_USING_LITW_INFRA",
 		study_recommendation: [],

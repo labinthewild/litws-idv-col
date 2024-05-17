@@ -63,7 +63,7 @@
         let otherInputField = document.getElementById('other-social-media');
         selector.addEventListener('change',
             (ev) => {
-                selectedSocialMedia = ev.target.value;
+                selectedSocialMedia = $.i18n(`study-idv-col-socials${ev.target.value}`);
                 if( ev.target.value === "other") {
                     otherInputField.style.visibility = "visible";
                     selected = true;
@@ -101,10 +101,7 @@
     function finishQuestions () {
         if (selected) {
             selectedSocialMedia = document.getElementById('other-social-media').value;
-        } else {
-            selectedSocialMedia = $.i18n(`study-idv-col-socials${selectedSocialMedia}`);
         }
-        LITW.study.params.selectedSM = selectedSocialMedia;
         let quest = {
                 responses: LITW.study.params.questionsAndResponses,
                 socialMedia: selectedSocialMedia
