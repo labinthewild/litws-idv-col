@@ -45,7 +45,7 @@
 </div>
 
 <script type="text/javascript">
-
+    let selected = false;
     let selectedSocialMedia = null;
     LITW.study.params.numQuestions = document.querySelectorAll('[data-type="question"]').length;
 
@@ -66,9 +66,10 @@
                 selectedSocialMedia = ev.target.value;
                 if( ev.target.value === "other") {
                     otherInputField.style.visibility = "visible";
-                    selectedSocialMedia = otherInputField.value;
+                    selected = true;
                 } else {
                     otherInputField.style.visibility = "hidden";
+                    selected = false;
                 }
             }
         );
@@ -98,6 +99,11 @@
     }
 
     function finishQuestions () {
+        if (selected) {
+            selectedSocialMedia = document.getElementById('other-social-media').value;
+        } else {
+            selectedSocialMedia = $.i18n(`study-idv-col-socials${selectedSocialMedia}`);
+        }
         LITW.study.params.selectedSM = selectedSocialMedia;
         let quest = {
                 responses: LITW.study.params.questionsAndResponses,
