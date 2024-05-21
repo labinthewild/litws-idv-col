@@ -177,9 +177,58 @@ module.exports = (function(exports) {
 	}
 
 	function calculateResults() {
-		//TODO: Nothing to calculate
-		let results_data = {}
+		let results_data = {};
+		let idvColScore = 0;
+		let privacyScore = 0;
+		let oversharingScore = 0;
+		for (const key in params.questionsAndResponses) {
+    	if (key <= 6) {
+      	idvColScore += (params.questionsAndResponses[key]);
+      } else if (key <= 12) {
+				privacyScore += (params.questionsAndResponses[key]);
+			} else {
+				oversharingScore += (params.questionsAndResponses[key]);
+			}
+    }
+		results_data = {
+			"idvColScore": idvColScore,
+			"privacyScore": privacyScore,
+			"oversharingScore": oversharingScore
+		}
+		LITW.data.submitStudyData({results_data1 : results_data});
+		chooseMessage(results_data);
+		console.log(idvColScore)
+		console.log(privacyScore)
+		console.log(oversharingScore)
 		showResults(results_data, true)
+	}
+
+	function chooseMessage(results_data) {
+		let totalPoints = 30;
+		let cutoff1 = totalPoints/2;
+		let totalOversharingPoints = 10;
+		let cutoff2 = totalOversharingPoints/2;
+		if(results_data.idvColScore < cutoff1) {
+			results_data.idvColMessage = $.i18n('litw-results-idv-result');
+		} else if (results_data.idvColScore > cutoff1) {
+			results_data.idvColMessage = $.i18n('litw-results-col-result');
+		} else {
+			results_data.idvColMessage = $.i18n('litw-results-idv-col-result');
+		}
+		if(results_data.privacyScore < cutoff1) {
+			results_data.privacyMessage = $.i18n('litw-results-low-privacy-result');
+		} else if (results_data.privacyScore > cutoff1) {
+			results_data.privacyMessage = $.i18n('litw-results-high-privacy-result');
+		} else {
+			results_data.privacyMessage = $.i18n('litw-results-med-privacy-result');
+		}
+		if(results_data.oversharingScore < cutoff2) {
+			results_data.oversharingMessage = $.i18n('litw-results-low-oversharing-result');
+		} else if (results_data.oversharingScore > cutoff2) {
+			results_data.oversharingMessage = $.i18n('litw-results-high-oversharing-result');
+		} else {
+			results_data.oversharingMessage = $.i18n('litw-results-med-oversharing-result');
+		}
 	}
 
 	function showResults(results = {}, showFooter = false) {
