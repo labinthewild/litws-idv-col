@@ -1,13 +1,14 @@
 (function (exports) {
-    const PAGE_CONTENT_WIDTH = document.getElementById('content').offsetWidth;
-    const MAX_GRAPH_WIDTH = 1000;
-    const MAX_GRAPH_HEIGHT = 400;
-    const MAX_SCORE = 100;
+    const PAGE_CONTENT_WIDTH = document.getElementById('content').offsetWidth + 100;
+    const MAX_GRAPH_WIDTH = 900;
+    const MAX_GRAPH_HEIGHT = 300;
+    const MAX_SCORE = 30;
 
     // Declare the chart dimensions and margins.
     const width = Math.min(PAGE_CONTENT_WIDTH, MAX_GRAPH_WIDTH);
+    const svgWidth = width + 25;
     const height = MAX_GRAPH_HEIGHT;
-    const barHeight = height / 10;
+    const barHeight = height / 7.5;
     const halfWidth = width / 2;
     let svg = null;
     const colors1 = ['rgb(0,80,27)', 'rgb(204,236,230)'];
@@ -47,7 +48,7 @@
       // Create the SVG container.
       svg = d3.select(`#${divID}`)
         .append("svg")
-        .attr("width", width)
+        .attr("width", svgWidth)
         .attr("height", height);
 
       // Define the first gradient

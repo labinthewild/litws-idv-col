@@ -98,12 +98,13 @@
   "litw-results-idv-result": "You are more of an individualist than a collectivist!",
   "litw-results-col-result": "You are more of a collectivist than an individualist!",
   "litw-results-idv-col-result": "You are in the middle when it comes to individualism vs collectivism!",
-  "litw-results-high-privacy-result": "You scored high on privacy.",
-  "litw-results-low-privacy-result": "You scored low on privacy.",
-  "litw-results-med-privacy-result": "You scored in the middle on privacy.",
-  "litw-results-high-oversharing-result": "You scored high on oversharing.",
-  "litw-results-low-oversharing-result": "You scored low on oversharing.",
-  "litw-results-med-oversharing-result": "You scored in the middle on oversharing.",
+  "litw-results-high-privacy-result": "Additionally, you scored high on privacy",
+  "litw-results-low-privacy-result": "Additionally, you scored low on privacy",
+  "litw-results-med-privacy-result": "Additionally, you scored in the middle on privacy",
+  "litw-results-high-oversharing-result": " and high on oversharing.",
+  "litw-results-low-oversharing-result": " and low on oversharing.",
+  "litw-results-med-oversharing-result": " and in the middle on oversharing.",
+  "litw-results-country-info": "Some countries are considered more collectivist or more individualist relative to other countries. Check out the map below that shows the individualism scores from Hofstede’s study.",
   "study-idv-col-results-map-note": "Note: The gray countries on this map are countries we do not have scores for on the individualism/collectivism dimension.",
   "study-idv-col-results-graphic-legend-1": "Individualistic",
   "study-idv-col-results-graphic-legend-2": "Collectivistic",
@@ -160,5 +161,6 @@
   "study-idv-col-socials7": "Snapchat",
   "study-idv-col-socials8": "X (Formerly Twitter)",
   "study-idv-col-socials9": "Pinterest",
-  "study-idv-col-socials10": "WeChat"
+  "study-idv-col-socials10": "WeChat",
+  "study-idv-col-score": "You"
 }

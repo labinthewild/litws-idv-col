@@ -223,11 +223,11 @@ module.exports = (function(exports) {
 			results_data.privacyMessage = $.i18n('litw-results-med-privacy-result');
 		}
 		if(results_data.oversharingScore < cutoff2) {
-			results_data.oversharingMessage = $.i18n('litw-results-low-oversharing-result');
+			results_data.privacyMessage = results_data.privacyMessage + $.i18n('litw-results-low-oversharing-result');
 		} else if (results_data.oversharingScore > cutoff2) {
-			results_data.oversharingMessage = $.i18n('litw-results-high-oversharing-result');
+			results_data.privacyMessage = results_data.privacyMessage + $.i18n('litw-results-high-oversharing-result');
 		} else {
-			results_data.oversharingMessage = $.i18n('litw-results-med-oversharing-result');
+			results_data.privacyMessage = results_data.privacyMessage + $.i18n('litw-results-med-oversharing-result');
 		}
 	}
 
