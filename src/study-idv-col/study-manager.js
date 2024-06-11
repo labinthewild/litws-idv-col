@@ -14,7 +14,7 @@ window.$ = window.jQuery = require("jquery");
 window.bootstrap = require("bootstrap");
 require("jquery-ui-bundle");
 var _ = require('lodash');
-var introTemplate = require("../templates/introduction.html");
+var introTemplate = require("./templates/introduction.html");
 var irbTemplate = require("../templates/irb.html");
 var demographicsTemplate = require("../templates/demographics.html");
 var instructionsTemplate = require("../templates/instructions.html");
@@ -39,11 +39,11 @@ module.exports = (function(exports) {
 		task_order: 1,
 		questionsPerPage: [6, 6, 2],
 		offset: 0,
-		study_id: "TO_BE_ADDED_IF_USING_LITW_INFRA",
+		study_id: "38bdd732-7e05-41c0-a005-e8cc1a1a898c",
 		study_recommendation: [],
 		preLoad: ["../img/btn-next.png","../img/btn-next-active.png","../img/ajax-loader.gif"],
 		slides: {
-			/*INTRODUCTION: {
+			INTRODUCTION: {
 				name: "introduction",
 				type: "display-slide",
 				template: introTemplate,
@@ -66,7 +66,7 @@ module.exports = (function(exports) {
 					var dem_data = $('#demographicsForm').alpaca().getValue();
 					LITW.data.submitDemographics(dem_data);
 				}
-			},*/
+			},
 			QUESTION1: {
 				name: "questionnaire",
 				type: "display-slide",
@@ -118,9 +118,9 @@ module.exports = (function(exports) {
 		params.questionOrderArray = createArray(15);
 		params.responseOrderArray = createArray(16);
 		params.socials = getSocialMediaPlatforms();
-		/*timeline.push(params.slides.INTRODUCTION);
-		timeline.push(params.slides.INFORMED_CONSENT);
-		timeline.push(params.slides.DEMOGRAPHICS);*/
+		timeline.push(params.slides.INTRODUCTION);
+		//timeline.push(params.slides.INFORMED_CONSENT);
+		//timeline.push(params.slides.DEMOGRAPHICS);
 		timeline.push(params.slides.QUESTION1);
 		timeline.push(params.slides.QUESTION2);
 		timeline.push(params.slides.QUESTION3);
