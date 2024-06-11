@@ -1,0 +1,30 @@
+<!-- Template for the results page -->
+<h3 class="bolded-blue" style="text-align: center">{{ data.idvColMessage }}</h3>
+<h5 class="bolded-blue" style="text-align: center">{{ data.privacyMessage }}</h5>
+
+{{#if data.code}}
+<h5 style="text-align: center">
+    <span data-i18n="litw-results-code"></span>
+    <span>{{ data.code }}</span>
+</h5>
+{{/if}}
+
+<div id="graphic" class="h-100 d-flex align-items-center justify-content-center"></div>
+<div id="participant_score" data-score="{{ data.idvColScore }}"></div>
+<h6 class="text-center" style="margin-bottom: 40px; margin-left: 7%; margin-right: 7%;" data-i18n="litw-results-country-info"></h6>
+<div style="width: 100%; display: flex; justify-content: center;">
+    <img style="width: 90%; justify-self: center;" src="img/Individualism_versus_collectivism_worldwide.png" alt="Individualism Vs Collectivism World Map">
+</div>
+<h6 class="text-center" style="margin-top: 40px;" data-i18n="study-idv-col-results-map-note"></h6>
+
+<br>
+<div id="results-footer"></div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        LITW.results.drawGraphic('graphic');
+        let score = document.getElementById('participant_score').dataset.score;
+        console.log(score)
+        LITW.results.drawMark(score, $.i18n('study-idv-col-score'));
+    });
+</script>

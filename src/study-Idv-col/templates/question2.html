@@ -1,0 +1,115 @@
+<h6 class="text-center bolded-blue" data-i18n="litw-progress-bar-label"></h6>
+<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 60px;">
+    <p class="bolded-blue" style="margin-right: 10px; margin-bottom: 0px;">0%</p>
+    <div id="progress-bar" style="width: 35%; background-color: rgba(232,232,235,255); border-radius: 50px; ">
+        <div id="bar" style="width: 0%; height: 15px; background-color: rgba(0,52,160,255);  border-radius: 50px; "></div>
+    </div>
+    <p class="bolded-blue" style="margin-left: 10px; margin-bottom: 0px;">100%</p>
+</div>
+
+<div id="question-box" class="instructions-stim-container">
+
+    <div id="questionnaire">
+        <div class="row gap-2">
+            <h3 class="bolded-blue" style="margin-bottom: 30px;">
+                <span data-i18n="litw-questionaire-instructions{{ this.task_order }}"></span>
+            </h3>
+        </div>
+        <h6 class="bolded-blue" data-i18n="study-idv-col-q15"></h6>
+        <div style="display: flex; justify-content: center; max-width:400px; margin: auto;">
+            <select id="social-media-selector" style="max-width: 400px; width: 400px; height: 30px;">
+                <option style="width:400px;" selected value="0">--</option>
+                <option style="width:400px;" class="editable" value="other">Other</option>
+            </select>
+        </div>
+        <input style="visibility: hidden; width: 400px; height: 30px;" type="text" id="other-social-media" name="other-social-media"><br><br>
+    {{#each questions}}
+        <div class="row mt-4">
+            <h6 id="question-{{ this.id }}" data-type="question" class="bolded-blue">{{ this.text }}</h6>
+            <div class="col d-flex justify-content-center">
+                <div class="btn-group me-2" role="group" aria-label="First group">
+    {{#each ../responses}}
+                    <button type="button" data-qid="{{ ../this.id }}" data-rid="{{ this.id }}" class="btn btn-outline-primary" onclick="respondQuestion({{ ../this.id }}, {{ this.id }})">
+                        {{ this.text }}
+                    </button>
+    {{/each}}
+                </div>
+            </div>
+        </div>
+    {{/each}}
+        <div id="submit" class="row mt-4 invisible">
+            <button id="button-save" type="button" class="btn btn-primary" data-bs-toggle="button"
+                    data-i18n="study-idv-col-save" onclick="finishQuestions()"></button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let selected = false;
+    let selectedSocialMedia = null;
+    LITW.study.params.numQuestions = document.querySelectorAll('[data-type="question"]').length;
+
+    $(document).ready(function() {
+        setUpSocialMediaSelection();
+        document.getElementById('submit').classList.add('invisible');
+        let elem = document.getElementById("bar");
+        elem.style.width = LITW.study.params.progressBarWidth + "%";
+        LITW.study.params.offset = 5;
+    });
+
+    function setUpSocialMediaSelection (qID, rID) {
+        let socials = LITW.study.params.socials;
+        let selector = document.getElementById('social-media-selector');
+        let otherInputField = document.getElementById('other-social-media');
+        selector.addEventListener('change',
+            (ev) => {
+                selectedSocialMedia = $.i18n(`study-idv-col-socials${ev.target.value}`);
+                if( ev.target.value === "other") {
+                    otherInputField.style.visibility = "visible";
+                    selected = true;
+                } else {
+                    otherInputField.style.visibility = "hidden";
+                    selected = false;
+                }
+            }
+        );
+        for (let socialMedia of Object.keys(socials)) {
+            selector.innerHTML = selector.innerHTML +
+                `<option value="${socialMedia}">${socials[socialMedia]}</option>`;
+        }
+    }
+
+    function respondQuestion (qID, rID) {
+        selectResponse(qID, rID);
+        LITW.study.params.questionsAndResponses[qID] = rID - LITW.study.params.offset;
+        if(Object.keys(LITW.study.params.questionsAndResponses).length % LITW.study.params.numQuestions === 0) {
+            document.getElementById('submit').classList.remove('invisible');
+        }
+    }
+
+    function selectResponse (qID, rID) {
+        document.querySelectorAll(`[data-qid='${qID}']`).forEach(btn => {
+            if(btn.dataset.rid == rID && !btn.classList.contains('active')) {
+                bootstrap.Button.getOrCreateInstance(btn).toggle();
+            }
+            if(btn.dataset.rid != rID && btn.classList.contains('active')) {
+                bootstrap.Button.getOrCreateInstance(btn).toggle();
+            }
+        })
+    }
+
+    function finishQuestions () {
+        if (selected) {
+            selectedSocialMedia = document.getElementById('other-social-media').value;
+        }
+        let quest = {
+                responses: LITW.study.params.questionsAndResponses,
+                socialMedia: selectedSocialMedia
+            };
+        LITW.data.submitStudyData({
+            quest: quest
+        });
+        document.getElementById('btn-next-page').click()
+    }
+
+</script>
