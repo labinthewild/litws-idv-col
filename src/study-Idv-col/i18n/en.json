@@ -163,5 +163,11 @@
   "study-idv-col-socials9": "Pinterest",
   "study-idv-col-socials10": "WeChat",
   "study-idv-col-score": "You",
-  "litw-progress-bar-label": "Study Completion"
+  "litw-progress-bar-label": "Study Completion",
+  "study-idv-col-results-map-disclaimer": "Note: The map data here is slightly different than the values from hofstede's cultural dimensions.",
+  "study-idv-col-citation-intro": "The sources used in this study are: ",
+  "study-idv-col-source1": "Trepte, S., Reinecke, L., Ellison, N. B., Quiring, O., Yao, M. Z., & Ziegele, M. (2017). A Cross-Cultural Perspective on the Privacy Calculus. Social Media + Society, 3(1), 205630511668803. https://doi.org/10.1177/2056305116688035", 
+  "study-idv-col-source2": "(n.d.). Individualism versus collectivism worldwide [Wikimedia Commons Individualism versus collectivism worldwide]. Retrieved June 19, 2024, from https://commons.wikimedia.org/wiki/File:Individualism_versus_collectivism_worldwide.png",
+  "study-idv-col-source3": "Beugelsdijk, S., & Welzel, C. (2018). Dimensions and Dynamics of National Culture: Synthesizing Hofstede With Inglehart. Journal of Cross-Cultural Psychology, 49(10), 1469–1505. Sagepub. https://doi.org/10.1177/0022022118798505",
+  "study-idv-col-source4": "Hofstede, G., & Minkov, M. (2010). Cultures and organizations : software of the mind : intercultural cooperation and its importance for survival (3rd ed.). Mcgraw-Hill."
 }

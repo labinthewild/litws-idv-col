@@ -69,11 +69,11 @@
     }
 
     function finishQuestions () {
-        let quest = {
+        let questionsResponses = {
             responses: LITW.study.params.questionsAndResponses
         };
         LITW.data.submitStudyData({
-            quest: quest
+            questionsResponses: questionsResponses
         });
         document.getElementById('btn-next-page').click()
     }

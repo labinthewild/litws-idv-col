@@ -43,7 +43,7 @@ module.exports = (function(exports) {
 		study_recommendation: [],
 		preLoad: ["../img/btn-next.png","../img/btn-next-active.png","../img/ajax-loader.gif"],
 		slides: {
-			/*INTRODUCTION: {
+			INTRODUCTION: {
 				name: "introduction",
 				type: "display-slide",
 				template: introTemplate,
@@ -66,7 +66,7 @@ module.exports = (function(exports) {
 					var dem_data = $('#demographicsForm').alpaca().getValue();
 					LITW.data.submitDemographics(dem_data);
 				}
-			},*/
+			},
 			QUESTION1: {
 				name: "questionnaire",
 				type: "display-slide",
@@ -118,9 +118,9 @@ module.exports = (function(exports) {
 		params.questionOrderArray = createArray(15);
 		params.responseOrderArray = createArray(16);
 		params.socials = getSocialMediaPlatforms();
-		/*timeline.push(params.slides.INTRODUCTION);
+		timeline.push(params.slides.INTRODUCTION);
 		timeline.push(params.slides.INFORMED_CONSENT);
-		timeline.push(params.slides.DEMOGRAPHICS);*/
+		timeline.push(params.slides.DEMOGRAPHICS);
 		timeline.push(params.slides.QUESTION1);
 		timeline.push(params.slides.QUESTION2);
 		timeline.push(params.slides.QUESTION3);
@@ -173,7 +173,15 @@ module.exports = (function(exports) {
 		for (let index = 1; index < num; index++) {
 			array.push(index);
 		}
-		return array;
+		let firstSix = array.splice(0, 6);
+		let secondSix = array.splice(0, 6);
+		let lastTwo = array.splice(0, 2);
+		firstSix.sort(() => (Math.random() > 0.5) ? 1 : -1);
+		secondSix.sort(() => (Math.random() > 0.5) ? 1 : -1);
+		lastTwo.sort(() => (Math.random() > 0.5) ? 1 : -1);
+		let combinedArray = firstSix.concat(secondSix);
+		combinedArray = combinedArray.concat(lastTwo);
+		return combinedArray;
 	}
 
 	function calculateResults() {
@@ -182,14 +190,14 @@ module.exports = (function(exports) {
 		let privacyScore = 0;
 		let oversharingScore = 0;
 		for (const key in params.questionsAndResponses) {
-    	if (key <= 6) {
-      	idvColScore += (params.questionsAndResponses[key]);
-      } else if (key <= 12) {
+			if (key <= 6) {
+				idvColScore += (params.questionsAndResponses[key]);
+			} else if (key <= 12) {
 				privacyScore += (params.questionsAndResponses[key]);
 			} else {
 				oversharingScore += (params.questionsAndResponses[key]);
 			}
-    }
+    	}
 		results_data = {
 			"idvColScore": idvColScore,
 			"privacyScore": privacyScore,
@@ -197,9 +205,6 @@ module.exports = (function(exports) {
 		}
 		LITW.data.submitStudyData({results_data1 : results_data});
 		chooseMessage(results_data);
-		console.log(idvColScore)
-		console.log(privacyScore)
-		console.log(oversharingScore)
 		showResults(results_data, true)
 	}
 
