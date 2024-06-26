@@ -8,6 +8,7 @@
 </div>
 
 <div id="question-box" class="instructions-stim-container">
+    <div id="quest-id" data-value="{{ this.task_order }}"></div>
     <div id="questionnaire">
         <div class="row gap-2">
             <h3 class="bolded-blue">
@@ -36,23 +37,19 @@
 </div>
 
 <script type="text/javascript">
-    LITW.study.params.numQuestions = document.querySelectorAll('[data-type="question"]').length;
+    TOTAL_Q = document.querySelectorAll('[data-type="question"]').length;
+    responses = {}
 
     $(document).ready(function() {
         document.getElementById('submit').classList.add('invisible');
         let elem = document.getElementById("bar");
         elem.style.width = LITW.study.params.progressBarWidth + "%";
-        if (LITW.study.params.numQuestions === 2) {
-            LITW.study.params.offset = 10;
-        } else {
-            LITW.study.params.offset = 0;
-        }
     });
 
     function respondQuestion (qID, rID) {
         selectResponse(qID, rID);
-        LITW.study.params.questionsAndResponses[qID] = rID - LITW.study.params.offset;
-        if(Object.keys(LITW.study.params.questionsAndResponses).length % LITW.study.params.numQuestions === 0) {
+        responses[qID] = rID;
+        if(Object.keys(responses).length === TOTAL_Q) {
             document.getElementById('submit').classList.remove('invisible');
         }
     }
@@ -69,12 +66,11 @@
     }
 
     function finishQuestions () {
-        let quest = {
-            responses: LITW.study.params.questionsAndResponses
-        };
-        LITW.data.submitStudyData({
-            quest: quest
-        });
+        let quest_id = `questionnaire_${document.getElementById('quest-id').dataset.value}`;
+        LITW.study.params.questionsAndResponses[quest_id] = JSON.parse(JSON.stringify(responses));
+        let data = {}
+        data[quest_id] = responses
+        LITW.data.submitStudyData(data);
         document.getElementById('btn-next-page').click()
     }
 

@@ -8,14 +8,14 @@
 </div>
 
 <div id="question-box" class="instructions-stim-container">
-
+    <div id="quest-id" data-value="{{ this.task_order }}"></div>
     <div id="questionnaire">
         <div class="row gap-2">
             <h3 class="bolded-blue" style="margin-bottom: 30px;">
                 <span data-i18n="litw-questionaire-instructions{{ this.task_order }}"></span>
             </h3>
         </div>
-        <h6 class="bolded-blue" data-i18n="study-idv-col-q15"></h6>
+        <h6 class="bolded-blue" data-i18n="study-idv-col-q2-q0"></h6>
         <div style="display: flex; justify-content: center; max-width:400px; margin: auto;">
             <select id="social-media-selector" style="max-width: 400px; width: 400px; height: 30px;">
                 <option style="width:400px;" selected value="0">--</option>
@@ -45,19 +45,19 @@
 </div>
 
 <script type="text/javascript">
-    let selected = false;
+    let selectedOther = false;
     let selectedSocialMedia = null;
-    LITW.study.params.numQuestions = document.querySelectorAll('[data-type="question"]').length;
+    TOTAL_Q = document.querySelectorAll('[data-type="question"]').length;
+    responses = {};
 
     $(document).ready(function() {
         setUpSocialMediaSelection();
         document.getElementById('submit').classList.add('invisible');
         let elem = document.getElementById("bar");
         elem.style.width = LITW.study.params.progressBarWidth + "%";
-        LITW.study.params.offset = 5;
     });
 
-    function setUpSocialMediaSelection (qID, rID) {
+    function setUpSocialMediaSelection () {
         let socials = LITW.study.params.socials;
         let selector = document.getElementById('social-media-selector');
         let otherInputField = document.getElementById('other-social-media');
@@ -66,10 +66,10 @@
                 selectedSocialMedia = $.i18n(`study-idv-col-socials${ev.target.value}`);
                 if( ev.target.value === "other") {
                     otherInputField.style.visibility = "visible";
-                    selected = true;
+                    selectedOther = true;
                 } else {
                     otherInputField.style.visibility = "hidden";
-                    selected = false;
+                    selectedOther = false;
                 }
             }
         );
@@ -81,8 +81,8 @@
 
     function respondQuestion (qID, rID) {
         selectResponse(qID, rID);
-        LITW.study.params.questionsAndResponses[qID] = rID - LITW.study.params.offset;
-        if(Object.keys(LITW.study.params.questionsAndResponses).length % LITW.study.params.numQuestions === 0) {
+        responses[qID] = rID;
+        if(Object.keys(responses).length === TOTAL_Q) {
             document.getElementById('submit').classList.remove('invisible');
         }
     }
@@ -99,16 +99,18 @@
     }
 
     function finishQuestions () {
-        if (selected) {
+        if (selectedOther) {
             selectedSocialMedia = document.getElementById('other-social-media').value;
         }
-        let quest = {
-                responses: LITW.study.params.questionsAndResponses,
-                socialMedia: selectedSocialMedia
-            };
-        LITW.data.submitStudyData({
-            quest: quest
-        });
+        let quest_id = `questionnaire_${document.getElementById('quest-id').dataset.value}`;
+        let data = {
+            responses: JSON.parse(JSON.stringify(responses)),
+            social_media: selectedSocialMedia
+        }
+        LITW.study.params.questionsAndResponses[quest_id] = data;
+        let data2 = {}
+        data2[quest_id] = data
+        LITW.data.submitStudyData(data2);
         document.getElementById('btn-next-page').click()
     }
 

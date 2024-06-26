@@ -31,10 +31,15 @@ require("../js/litw/jspsych-display-slide");
 module.exports = (function(exports) {
 	var timeline = [],
 	params = {
-		questionsAndResponses: {},
-		progressBarWidth: -33,
-		questionOrderArray: [],
-		responseOrderArray: [],
+		questionsAndResponses: { //DUMMY DATA - Needs to be set by questionnaire slides
+			questionnaire_1: { '1': 4, '2': 2, '3': 3, '4': 5, '5': 1, '6': 5 },
+			questionnaire_2: {
+				responses: { '1': 5, '2': 5, '3': 3, '4': 4, '5': 1, '6': 2 },
+				social_media: 'Mastodon'
+			},
+			questionnaire_3: { '1': 5, '2': 5 }
+		},
+		progressBarWidth: 0,
 		numQuestions: 0,
 		task_order: 1,
 		questionsPerPage: [6, 6, 2],
@@ -71,25 +76,31 @@ module.exports = (function(exports) {
 				name: "questionnaire",
 				type: "display-slide",
 				template: question1Template,
-				template_data: getStudyQuestions,
+				template_data: () => { return getStudyQuestions(1, 6) },
 				display_element: $("#question1"),
 				display_next_button: false,
+				finish: () => {
+					params.progressBarWidth += 33
+				}
 			},
 			QUESTION2: {
 				name: "questionnaire",
 				type: "display-slide",
 				template: question2Template,
-				template_data: getStudyQuestions,
+				template_data: () => { return getStudyQuestions(2, 6) },
 				display_element: $("#question2"),
 				display_next_button: false,
+				finish: () => {
+					params.progressBarWidth += 33
+				}
 			},
 			QUESTION3: {
 				name: "questionnaire",
 				type: "display-slide",
 				template: question1Template,
-				template_data: getStudyQuestions,
+				template_data: () => { return getStudyQuestions(3, 2) },
 				display_element: $("#question1"),
-				display_next_button: false,
+				display_next_button: false
 			},
 			COMMENTS: {
 				type: "display-slide",
@@ -115,8 +126,6 @@ module.exports = (function(exports) {
 	};
 
 	function configureStudy() {
-		params.questionOrderArray = createArray(15);
-		params.responseOrderArray = createArray(16);
 		params.socials = getSocialMediaPlatforms();
 		timeline.push(params.slides.INTRODUCTION);
 		//timeline.push(params.slides.INFORMED_CONSENT);
@@ -136,44 +145,35 @@ module.exports = (function(exports) {
 		return array;
 	}
 
-	function getStudyQuestions() {
-		let counter = 1;
-		let numQ = params.questionsPerPage[0];
-		let numA = 5;
-		let quest = {
+	function getStudyQuestions(questionnaire_number, num_questions, num_answers=5) {
+		let questionnaire = {
 			questions: [],
 			responses: [],
-			task_order: params.task_order
+			task_order: questionnaire_number
 		}
-		while(counter <= Math.max(numQ, numA)) {
-			if (counter <= numQ) {
-				quest.questions.push({
-					id: params.questionOrderArray[counter - 1],
-					text: $.i18n(`study-idv-col-q${params.questionOrderArray[counter - 1]}`)
-				})
-			}
-			if (counter <= numA) {
-				quest.responses.push({
-					id: params.responseOrderArray[counter - 1],
-					text: $.i18n(`study-idv-col-r${params.responseOrderArray[counter - 1]}`)
-				})
-			}
-			counter++;
+		for(let counter_q=1; counter_q <= num_questions; counter_q++) {
+			let q_code = `q${questionnaire_number}-q${counter_q}`
+			questionnaire.questions.push({
+				id: counter_q,
+				text: $.i18n(`study-idv-col-${q_code}`)
+			})
 		}
-		params.task_order++;
-		params.progressBarWidth += 33;
-		params.questionsPerPage.shift();
-		params.questionOrderArray.splice(0, 6);
-		params.responseOrderArray.splice(0, 5);
-		return quest;
+		for(let counter_a=1; counter_a <= num_answers; counter_a++) {
+			let a_code = `q${questionnaire_number}-r${counter_a}`
+			questionnaire.responses.push({
+				id: counter_a,
+				text: $.i18n(`study-idv-col-${a_code}`)
+			})
+		}
+		questionnaire.questions = shuffleArray(questionnaire.questions);
+		return questionnaire;
 	}
 
-	function createArray(num) {
-		let array = [];
-		for (let index = 1; index < num; index++) {
-			array.push(index);
-		}
-		return array;
+	function shuffleArray( array ) {
+		return array
+			.map(value => ({ value, sort: Math.random() }))
+    		.sort((a, b) => a.sort - b.sort)
+    		.map(({ value }) => value)
 	}
 
 	function calculateResults() {
@@ -181,25 +181,23 @@ module.exports = (function(exports) {
 		let idvColScore = 0;
 		let privacyScore = 0;
 		let oversharingScore = 0;
-		for (const key in params.questionsAndResponses) {
-    	if (key <= 6) {
-      	idvColScore += (params.questionsAndResponses[key]);
-      } else if (key <= 12) {
-				privacyScore += (params.questionsAndResponses[key]);
-			} else {
-				oversharingScore += (params.questionsAndResponses[key]);
-			}
-    }
+		for (let idv_value of Object.values(params.questionsAndResponses.questionnaire_1)) {
+			idvColScore += (idv_value);
+		}
+		for (let priv_value of Object.values(params.questionsAndResponses.questionnaire_2.responses)) {
+			privacyScore += priv_value;
+		}
+		for (let sharing_value of Object.values(params.questionsAndResponses.questionnaire_1)) {
+			privacyScore += sharing_value;
+		}
+
 		results_data = {
 			"idvColScore": idvColScore,
 			"privacyScore": privacyScore,
 			"oversharingScore": oversharingScore
 		}
-		LITW.data.submitStudyData({results_data1 : results_data});
+		LITW.data.submitStudyData({results_data : results_data});
 		chooseMessage(results_data);
-		console.log(idvColScore)
-		console.log(privacyScore)
-		console.log(oversharingScore)
 		showResults(results_data, true)
 	}
 
