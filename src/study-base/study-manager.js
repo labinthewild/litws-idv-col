@@ -25,6 +25,7 @@ import progressHTML from "../templates/progress.html";
 Handlebars.registerPartial('prog', Handlebars.compile(progressHTML));
 import introHTML from "../templates/introduction.html";
 import irbHTML from "../templates/irb.html";
+import irb_LITW_HTML from "../templates/irb2-litw.html";
 import questHTML from "../templates/questionnaire.html";
 import demographicsHTML from "../templates/demographics.html";
 import loadingHTML from "../templates/loading.html";
@@ -36,6 +37,7 @@ require("../js/litw/jspsych-display-slide");
 //CONVERT HTML INTO TEMPLATES
 let introTemplate = Handlebars.compile(introHTML);
 let irbTemplate = Handlebars.compile(irbHTML);
+let irbLITWTemplate = Handlebars.compile(irb_LITW_HTML);
 let questTemplate = Handlebars.compile(questHTML);
 let demographicsTemplate = Handlebars.compile(demographicsHTML);
 let loadingTemplate = Handlebars.compile(loadingHTML);
@@ -45,8 +47,13 @@ let commentsTemplate = Handlebars.compile(commentsHTML);
 
 //TODO: document "params.study_id" when updating the docs/7-ManageData!!!
 module.exports = (function(exports) {
-	var timeline = [],
-	params = {
+	const study_times= {
+			SHORT: 5,
+			MEDIUM: 10,
+			LONG: 15,
+		};
+	let timeline = [];
+	let params = {
 		study_id: "TO_BE_ADDED_IF_USING_LITW_INFRA",
 		study_recommendation: [],
 		preLoad: ["../img/btn-next.png","../img/btn-next-active.png","../img/ajax-loader.gif"],
@@ -62,6 +69,16 @@ module.exports = (function(exports) {
 				name: "informed_consent",
 				type: "display-slide",
 				template: irbTemplate,
+				display_element: $("#irb"),
+				display_next_button: false,
+			},
+			INFORMED_CONSENT_LITW: {
+				name: "informed_consent",
+				type: "display-slide",
+				template: irbLITWTemplate,
+				template_data: {
+					time: study_times.SHORT,
+				},
 				display_element: $("#irb"),
 				display_next_button: false,
 			},
