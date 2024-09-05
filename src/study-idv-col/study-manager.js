@@ -24,7 +24,7 @@ import progressHTML from "../templates/progress.html";
 Handlebars.registerPartial('prog', Handlebars.compile(progressHTML));
 import loadingHTML from "../templates/loading.html";
 import introHTML from "./templates/introduction.html";
-import irbHTML from "../templates/irb.html";
+import irb_LITW_HTML from "../templates/irb2-litw.html";
 import quest1HTML from "./templates/question1.html";
 import quest2HTML from "./templates/question2.html";
 import demographicsHTML from "../templates/demographics.html";
@@ -35,7 +35,7 @@ import commentsHTML from "../templates/comments.html";
 require("../js/litw/jspsych-display-slide");
 //CONVERT HTML INTO TEMPLATES
 let introTemplate = Handlebars.compile(introHTML);
-let irbTemplate = Handlebars.compile(irbHTML);
+let irbLITWTemplate = Handlebars.compile(irb_LITW_HTML);
 let question1Template = Handlebars.compile(quest1HTML);
 let question2Template = Handlebars.compile(quest2HTML);
 let demographicsTemplate = Handlebars.compile(demographicsHTML);
@@ -46,8 +46,13 @@ let commentsTemplate = Handlebars.compile(commentsHTML);
 
 //TODO: document "params.study_id" when updating the docs/7-ManageData!!!
 module.exports = (function(exports) {
-	var timeline = [],
-	params = {
+	const study_times= {
+		SHORT: 5,
+		MEDIUM: 10,
+		LONG: 15,
+	};
+	let timeline = [];
+	let params = {
 		questionsAndResponses: { //DUMMY DATA - Needs to be set by questionnaire slides
 			questionnaire_1: { '1': 4, '2': 2, '3': 3, '4': 5, '5': 1, '6': 5 },
 			questionnaire_2: {
@@ -72,10 +77,13 @@ module.exports = (function(exports) {
 				display_element: $("#intro"),
 				display_next_button: false,
 			},
-			INFORMED_CONSENT: {
+			INFORMED_CONSENT_LITW: {
 				name: "informed_consent",
 				type: "display-slide",
-				template: irbTemplate,
+				template: irbLITWTemplate,
+				template_data: {
+					time: study_times.SHORT,
+				},
 				display_element: $("#irb"),
 				display_next_button: false,
 			},
@@ -145,7 +153,7 @@ module.exports = (function(exports) {
 	function configureStudy() {
 		params.socials = getSocialMediaPlatforms();
 		timeline.push(params.slides.INTRODUCTION);
-		timeline.push(params.slides.INFORMED_CONSENT);
+		timeline.push(params.slides.INFORMED_CONSENT_LITW);
 		timeline.push(params.slides.DEMOGRAPHICS);
 		timeline.push(params.slides.QUESTION1);
 		timeline.push(params.slides.QUESTION2);
