@@ -94,7 +94,7 @@ module.exports = (function(exports) {
 				}
 			},
 			QUESTION1: {
-				name: "questionnaire",
+				name: "questionnaire1",
 				type: "display-slide",
 				template: question1Template,
 				template_data: () => { return getStudyQuestions(1, 6, 5, 33) },
@@ -103,7 +103,7 @@ module.exports = (function(exports) {
 				finish: () => {}
 			},
 			QUESTION2: {
-				name: "questionnaire",
+				name: "questionnaire2",
 				type: "display-slide",
 				template: question2Template,
 				template_data: () => { return getStudyQuestions(2, 6, 5, 66) },
@@ -112,7 +112,7 @@ module.exports = (function(exports) {
 				finish: () => {}
 			},
 			QUESTION3: {
-				name: "questionnaire",
+				name: "questionnaire3",
 				type: "display-slide",
 				template: question1Template,
 				template_data: () => { return getStudyQuestions(3, 2, 5,100) },

@@ -13,8 +13,8 @@
     {{#each questions}}
         <div class="row mt-4">
             <h6 id="question-{{ this.id }}" data-type="question" class="bolded-blue">{{ this.text }}</h6>
-            <div class="col d-flex justify-content-center">
-                <div class="btn-group me-2" role="group" aria-label="First group">
+            <div class="col justify-content-center litw-button-group-container">
+                <div class="btn-group me-2 litw-button-group" role="group" aria-label="First group">
     {{#each ../responses}}
                     <button type="button" data-qid="{{ ../this.id }}" data-rid="{{ this.id }}" class="btn btn-outline-primary" onclick="respondQuestion({{ ../this.id }}, {{ this.id }})">
                         {{ this.text }}
